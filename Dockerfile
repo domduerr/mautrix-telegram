@@ -37,11 +37,12 @@ RUN apk add --no-cache \
 COPY requirements.txt /opt/mautrix-telegram/requirements.txt
 COPY optional-requirements.txt /opt/mautrix-telegram/optional-requirements.txt
 WORKDIR /opt/mautrix-telegram
-RUN apk add --virtual .build-deps python3-dev libffi-dev build-base \
+RUN apk add git && apk add --virtual .build-deps python3-dev libffi-dev build-base \
  && pip3 install /cryptg-*.whl \
  && pip3 install --no-cache-dir -r requirements.txt -r optional-requirements.txt \
  && apk del .build-deps \
- && rm -f /cryptg-*.whl
+ && rm -f /cryptg-*.whl \
+ && apk del git
 
 COPY . /opt/mautrix-telegram
 RUN apk add git && pip3 install --no-cache-dir .[all] && apk del git \
